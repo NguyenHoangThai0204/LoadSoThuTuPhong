@@ -100,60 +100,6 @@ async function loadSTT(idPhongBuong, idChiNhanh) {
     }
 }
 
-//async function loadSTT(idPhongBuong, idChiNhanh) {
-//    if (!idPhongBuong || isNaN(idPhongBuong) || idPhongBuong <= 0 || !idChiNhanh) {
-//        console.error("Tham số không hợp lệ. Dừng loadSTT.", { idPhongBuong, idChiNhanh });
-//        return;
-//    }
-
-//    try {
-//        const res = await fetch(`/load_so_thu_tu_phong/filter?IdPhongBuong=${idPhongBuong}&IdChiNhanh=${idChiNhanh}`, {
-//            method: "POST"
-//        });
-
-//        if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
-
-//        const json = await res.json();
-//        const data = json.data; // Chữ thường
-//        console.log("Data nhận từ server:", data);
-
-//        const intervalTime = (json.ThoiGian || 5) * 1000;
-
-//        const tbody = document.getElementById("sttList");
-//        if (!tbody) return;
-
-//        tbody.innerHTML = ""; // Xóa nội dung cũ
-
-//        if (!data || data.length === 0) {
-//            tbody.innerHTML = `<tr><td colspan="3" class="text-center py-3">Không có số thứ tự</td></tr>`;
-//        } else {
-//            data.forEach(item => {
-//                const tr = document.createElement("tr");
-//                let statusClass = "", statusText = "";
-
-//                if (item.trangThai === 1) { statusClass = "status-invite"; statusText = "Đang mời"; }
-//                else if (item.trangThai === 2) { statusClass = "status-wait"; statusText = "Chuẩn bị"; }
-//                else { statusClass = "status-empty"; statusText = "Chờ tới lượt"; }
-
-//                tr.innerHTML = `
-//                    <td>${item.soThuTu}</td>
-//                    <td>${item.tenBN}</td>
-//                    <td class="${statusClass}">${statusText}</td>
-//                `;
-//                tbody.appendChild(tr);
-//            });
-//        }
-
-//        if (currentInterval) clearTimeout(currentInterval);
-//        currentInterval = setTimeout(() => loadSTT(idPhongBuong, idChiNhanh), intervalTime);
-
-//    } catch (err) {
-//        console.error("Lỗi load STT:", err);
-//        if (currentInterval) clearTimeout(currentInterval);
-//        currentInterval = setTimeout(() => loadSTT(idPhongBuong, idChiNhanh), 5000);
-//    }
-//}
-
 
 // ===== DROPDOWN SEARCH CHUNG =====
 function initSearchDropdown({ inputId, dropdownId, hiddenFieldId, data = [], onSelect }) {
@@ -221,29 +167,7 @@ function initSearchDropdown({ inputId, dropdownId, hiddenFieldId, data = [], onS
 
 // ===== DOM READY =====
 document.addEventListener("DOMContentLoaded", function () {
-    //console.log("DOM đã tải xong - Khởi tạo ứng dụng");
-
-    //// === QUA LƯỢT MẪU ===
-    //const quaLuotData = [
-    //    { ten: "Nguyễn Văn A", stt: "012" },
-    //    { ten: "Trần Thị B", stt: "013" },
-    //    { ten: "Lê Văn C", stt: "014" }
-    //];
-    //const quaLuotContainer = document.getElementById("quaLuotList");
-    //if (quaLuotContainer) {
-    //    quaLuotContainer.innerHTML = "";
-    //    if (!quaLuotData.length) {
-    //        quaLuotContainer.innerHTML = `<span class="badge bg-secondary-subtle text-secondary px-3 py-2">Không</span>`;
-    //    } else {
-    //        quaLuotData.forEach(item => {
-    //            const pill = document.createElement("div");
-    //            pill.className = "ticker-item";
-    //            pill.innerText = `${item.ten} - STT ${item.stt}`;
-    //            quaLuotContainer.appendChild(pill);
-    //        });
-    //    }
-    //}
-    // Trong LoadSoThuTuPhongJs.js
+    
 
     // === LOAD KHOA & PHÒNG ===
     $.getJSON("/dist/data/json/DM_Khoa.json", dataKhoa => {

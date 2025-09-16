@@ -33,7 +33,6 @@ wwwroot\dist\data\json\DM_LoaiThuThuatPhauThuat.json
 wwwroot\dist\data\json\DM_NhomDichVuKyThuat.json
 wwwroot\dist\data\json\DM_PhongBuong.json
 wwwroot\dist\img\Logo-BVUB.jpg
-wwwroot\dist\js\BienChung.js
 wwwroot\dist\js\LoadSoThuTuPhongJs.js
 wwwroot\dist\lib\apexcharts\dist\apexcharts.amd.js
 wwwroot\dist\lib\apexcharts\dist\apexcharts.common.js
@@ -1047,3 +1046,4 @@ wwwroot\dist\lib\tom-select\dist\js\tom-select.popular.js.map
 wwwroot\dist\lib\tom-select\dist\js\tom-select.popular.min.js
 wwwroot\dist\lib\tom-select\dist\js\tom-select.popular.min.js.map
 wwwroot\favicon.ico
+wwwroot\dist\js\BienChung.js

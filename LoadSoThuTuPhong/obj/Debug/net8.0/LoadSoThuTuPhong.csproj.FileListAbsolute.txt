@@ -87,3 +87,4 @@ D:\Sixos\LoadSoThuTuPhong\LoadSoThuTuPhong\bin\Debug\net8.0\runtimes\browser\lib
 D:\Sixos\LoadSoThuTuPhong\LoadSoThuTuPhong\bin\Debug\net8.0\runtimes\win\lib\net6.0\System.Windows.Extensions.dll
 D:\Sixos\LoadSoThuTuPhong\LoadSoThuTuPhong\obj\Debug\net8.0\LoadSoThuTuPhong.csproj.AssemblyReference.cache
 D:\Sixos\LoadSoThuTuPhong\LoadSoThuTuPhong\obj\Debug\net8.0\LoadSoTh.5E270439.Up2Date
+D:\Sixos\LoadSoThuTuPhong\LoadSoThuTuPhong\obj\Debug\net8.0\LoadSoThuTuPhong.sourcelink.json

@@ -49,8 +49,6 @@ namespace LoadSoThuTuPhong.Service
                     return (true, "Không có dữ liệu", new { Paged = new List<object>(), Full = new List<object>() });
                 }
 
-                // Nếu bạn muốn phân trang, thêm logic phân trang ở đây
-                // var pagedData = allData.Skip(0).Take(10).ToList(); // Ví dụ
 
                 return (true, "Thành công", allData);
             }
