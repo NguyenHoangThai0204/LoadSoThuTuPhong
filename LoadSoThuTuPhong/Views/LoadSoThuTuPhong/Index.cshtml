@@ -1,0 +1,294 @@
+﻿@{
+    ViewData["NonSixOs"] = true;
+    var tenPhong = " "; // Giá trị ban đầu (có thể trống nếu cần)
+}
+
+<!-- import bootstrap + icons -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
+
+<style>
+    body {
+        background: #f5faff;
+        font-family: "Segoe UI", Arial, sans-serif;
+        margin: 0;
+        color: #003366;
+    }
+
+    img.logo {
+        filter: brightness(70%) contrast(150%);
+        border-radius: 8px;
+    }
+
+    /* HEADER */
+    .header {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(90deg, #007acc, #005999);
+        padding: 20px 40px;
+        color: white;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+        position: relative;
+    }
+
+        .header img {
+            position: absolute;
+            left: 30px;
+            height: 70px;
+        }
+
+    .header-text {
+        text-align: center;
+    }
+
+    .hospital-name {
+        font-size: 2.4rem;
+        font-weight: bold;
+        letter-spacing: 1px;
+    }
+
+    .room-name {
+        font-size: 1.8rem; /* bự hơn */
+        font-weight: bold;
+        margin-top: 5px;
+        color: #ffeb3b;
+        text-shadow: 1px 1px 2px rgba(0,0,0,0.4);
+    }
+    /* Icon cài đặt */
+    .settings-icon {
+        position: absolute;
+        right: 30px;
+        font-size: 1.8rem;
+        color: rgba(255, 255, 255, 0.6); /* trắng mờ */
+        cursor: pointer;
+        transition: color 0.3s;
+    }
+
+        .settings-icon:hover {
+            color: white;
+        }
+
+    /* DANH SÁCH BỆNH NHÂN */
+    .patient-list {
+        margin: 10px auto 80px; /* chừa chỗ cho ticker + footer */
+        width: 100%;
+        border-collapse: collapse;
+        background: white;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+        .patient-list th, .patient-list td {
+            padding: 22px;
+            border-bottom: 1px solid #e0e6ed;
+            font-size: 1.6rem;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .patient-list th {
+            background: #007acc;
+            color: white;
+            text-transform: uppercase;
+            font-size: 1.7rem;
+        }
+
+    .status-invite {
+        color: #e60000;
+        animation: blink 1s infinite alternate;
+    }
+
+    .status-wait {
+        color: #ff8800;
+    }
+
+    .status-empty {
+        color: #009933;
+    }
+    @@keyframes blink {
+        from
+
+    {
+        opacity: 1;
+    }
+
+    to {
+        opacity: 0.4;
+    }
+
+    }
+
+    /* QUA LƯỢT */
+    .ticker-wrapper {
+        display: flex;
+        align-items: center;
+        background: #005999; /* xanh dương đậm */
+        color: white;
+        position: fixed;
+        bottom: 40px; /* chừa chỗ cho footer */
+        width: 100%;
+        box-shadow: 0 -2px 8px rgba(0,0,0,0.2);
+        overflow: hidden;
+    }
+
+    .ticker-title {
+        flex: 0 0 auto;
+        background: #004477;
+        padding: 15px 25px;
+        font-size: 1.6rem;
+        font-weight: bold;
+        text-transform: uppercase;
+        border-right: 2px solid #003366;
+    }
+
+    .ticker {
+        flex: 1;
+        overflow: hidden;
+        white-space: nowrap;
+    }
+
+    .ticker-content {
+        display: inline-block;
+        animation: scroll-left 10s linear infinite;
+    }
+
+    .ticker-item {
+        display: inline-block;
+        padding: 12px 25px;
+        margin: 0 15px;
+        background: #cce7ff; /* xanh biển nhạt */
+        border-radius: 25px;
+        font-size: 1.6rem;
+        font-weight: bold;
+        color: #004477; /* xanh biển đậm */
+        box-shadow: 0 3px 6px rgba(0,0,0,0.25);
+    }
+
+    @@keyframes scroll-left {
+        0%
+
+    {
+        transform: translateX(100%);
+    }
+
+    100% {
+        transform: translateX(-100%);
+    }
+
+    }
+
+    /* FOOTER */
+    .footer {
+        position: fixed;
+        bottom: 0;
+        width: 100%;
+        background: #003366;
+        color: #cccccc; /* chữ chìm */
+        text-align: center;
+        padding: 6px 10px;
+        font-size: 1.1rem; /* nhỏ hơn */
+        font-weight: normal;
+    }
+</style>
+
+<div class="card p-1 " >
+
+    <!-- HEADER -->
+    <div class="header">
+        <img src="~/dist/img/Logo-BVUB.jpg" alt="Logo Bệnh viện" class="logo">
+        <div class="header-text">
+            <div class="hospital-name">  @ViewBag.DoanhNghiep.TenCSKCB?.ToString().ToUpper()</div>
+            <div class="room-name" id="roomName" style="text-transform: uppercase !important;">
+                @(tenPhong?.ToString().ToUpper(new System.Globalization.CultureInfo("vi-VN")) ?? "")
+            </div>
+
+        </div>
+        <div class="settings-icon"
+             data-bs-toggle="modal"
+             data-bs-target="#settingsModal">⚙</div>
+    </div>
+
+    <!-- DANH SÁCH BỆNH NHÂN -->
+    <table class="patient-list">
+        <thead>
+            <tr>
+                <th>Số thứ tự</th>
+                <th>Họ và tên</th>
+                <th>Trạng thái</th>
+            </tr>
+        </thead>
+        <tbody id="sttList">
+            <!-- Dữ liệu mẫu sẽ được thay thế bằng JS -->
+        </tbody>
+ 
+    </table>
+
+    <!-- QUA LƯỢT -->
+
+    <div class="ticker-wrapper">
+        <div class="ticker-title">QUA LƯỢT</div>
+        <div class="ticker">
+            <div class="ticker-content" id="quaLuotList">
+            </div>
+        </div>
+    </div>
+    <!-- FOOTER -->
+    <div class="footer">
+        © 2025 Công ty TNHH Giải Pháp Phần Mềm Y Tế | Địa chỉ: 123 Đường ABC, TP.HCM | Hotline: 0909 123 456 | Website: www.congtyyte.vn
+    </div>
+
+
+</div>
+<!-- Modal -->
+<div class="modal fade" id="settingsModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Chọn thông tin khoa phòng</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <!-- Dropdown Khoa -->
+                <div class="mb-3">
+                    <label class="form-label">Khoa</label>
+                    <div class="position-relative">
+                        <input type="text" id="searchKhoa" class="form-control" autocomplete="off">
+                        <input type="hidden" id="selectedKhoaId" name="KhoaId">
+                        <div id="dropdownKhoa"
+                             class="dropdown-menu"
+                             style="display:none; position:absolute; width:100%; z-index:1055;
+                                    max-height:200px; overflow-y:auto; font-size:1rem;">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Dropdown Phòng -->
+                <div class="mb-3">
+                    <label class="form-label">Phòng buồng</label>
+                    <div class="position-relative">
+                        <input type="text" id="searchPhong" class="form-control" autocomplete="off">
+                        <input type="hidden" id="selectedPhongId" name="PhongId" >
+                        <div id="dropdownPhong"
+                             class="dropdown-menu"
+                             style="display:none; position:absolute; width:100%; z-index:1055;
+                                    max-height:200px; overflow-y:auto; font-size:1rem;">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                <button class="btn btn-primary" id="saveRoomBtn">Lưu</button>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts {
+    <script src="/dist/js/BienChung.js"></script>
+
+    <script src="@Url.Content("~/dist/lib/Jquery/jquery.min.js")"></script>
+    <script src="@Url.Content("~/dist/lib/Jquery/jquery.inputmask.js")"></script>
+    <script src="\dist\lib\bootstrap\dist\js\bootstrap.bundle.min.js" defer></script>
+    <script src="\dist\js\LoadSoThuTuPhongJs.js" asp-append-version="true" defer></script>
+
+
+}
