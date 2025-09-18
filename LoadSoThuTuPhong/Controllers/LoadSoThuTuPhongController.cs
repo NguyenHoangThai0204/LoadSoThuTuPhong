@@ -24,6 +24,39 @@ namespace LoadSoThuTuPhong.Controllers
             _dbService = dbService;
             _env = env;
         }
+
+        public async Task<IActionResult> Index(long? idChiNhanh)
+        {
+            //var quyenVaiTro = await _memoryCache.getQuyenVaiTro(_maChucNang);
+            //if (quyenVaiTro == null)
+            //{
+            //    return RedirectToAction("NotFound", "Home");
+            //}
+            //ViewBag.quyenVaiTro = quyenVaiTro;
+            //ViewData["Title"] = CommonServices.toEmptyData(quyenVaiTro);
+
+            ViewBag.quyenVaiTro = new
+            {
+                Them = true,
+                Sua = true,
+                Xoa = true,
+                Xuat = true,
+                CaNhan = true,
+                Xem = true,
+            };
+
+            if (!idChiNhanh.HasValue || idChiNhanh == 0)
+            {
+                idChiNhanh = GetIdcnFromBienChung();
+            }
+            // Truy vấn EF Core
+            var thongTin = await _dbService.Set<ThongTinDoanhNghiep>()
+                .FirstOrDefaultAsync(x => x.IDChiNhanh == idChiNhanh);
+
+            ViewBag.DoanhNghiep = thongTin;
+
+            return View(thongTin); 
+        }
         private long GetIdcnFromBienChung()
         {
             try
@@ -57,39 +90,6 @@ namespace LoadSoThuTuPhong.Controllers
 
             return 2; // Giá trị mặc định nếu không đọc được
         }
-        public async Task<IActionResult> Index(long? idChiNhanh)
-        {
-            //var quyenVaiTro = await _memoryCache.getQuyenVaiTro(_maChucNang);
-            //if (quyenVaiTro == null)
-            //{
-            //    return RedirectToAction("NotFound", "Home");
-            //}
-            //ViewBag.quyenVaiTro = quyenVaiTro;
-            //ViewData["Title"] = CommonServices.toEmptyData(quyenVaiTro);
-
-            ViewBag.quyenVaiTro = new
-            {
-                Them = true,
-                Sua = true,
-                Xoa = true,
-                Xuat = true,
-                CaNhan = true,
-                Xem = true,
-            };
-
-            if (!idChiNhanh.HasValue || idChiNhanh == 0)
-            {
-                idChiNhanh = GetIdcnFromBienChung();
-            }
-            // Truy vấn EF Core
-            var thongTin = await _dbService.Set<ThongTinDoanhNghiep>()
-                .FirstOrDefaultAsync(x => x.IDChiNhanh == idChiNhanh);
-
-            ViewBag.DoanhNghiep = thongTin;
-
-            return View(thongTin); 
-        }
-
         [HttpPost("filter")]
         public async Task<IActionResult> LoadSTT(long IdPhongBuong, long IdChiNhanh)
         {

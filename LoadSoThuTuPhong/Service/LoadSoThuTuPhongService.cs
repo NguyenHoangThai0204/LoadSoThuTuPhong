@@ -27,6 +27,9 @@ namespace LoadSoThuTuPhong.Service
             try
             {
 
+                _logger.LogInformation("STT={STT}, TenBN={TenBN}",
+                       IdPhongBuong,
+                       IdChiNhanh);
 
                 var allData = await _dbService.LoadSoThuTuPhongModels
                  .FromSqlRaw("EXEC LoadSoThuTuPhong @IdPhongBuong, @IdChiNhanh",
