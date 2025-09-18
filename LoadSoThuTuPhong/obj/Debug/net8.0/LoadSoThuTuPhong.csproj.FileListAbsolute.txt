@@ -1,4 +1,3 @@
-D:\Sixos\LoadSoThuTuPhong\LoadSoThuTuPhong\bin\Debug\net8.0\appsettings.Development.json
 D:\Sixos\LoadSoThuTuPhong\LoadSoThuTuPhong\bin\Debug\net8.0\appsettings.json
 D:\Sixos\LoadSoThuTuPhong\LoadSoThuTuPhong\bin\Debug\net8.0\LoadSoThuTuPhong.staticwebassets.runtime.json
 D:\Sixos\LoadSoThuTuPhong\LoadSoThuTuPhong\bin\Debug\net8.0\LoadSoThuTuPhong.staticwebassets.endpoints.json

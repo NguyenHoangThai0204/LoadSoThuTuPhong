@@ -16,10 +16,10 @@
 
     img.logo {
         filter: brightness(90%) contrast(150%);
-        border-radius: 15px;
+        border-radius: 23px;
     }
-
     /* HEADER */
+
     .header {
         display: flex;
         align-items: center;
@@ -33,10 +33,9 @@
     }
 
         .header img {
-            position: absolute;
-            /* left: 30px;
-            height: 70px; */
-            left: 0;
+            position: absolute; /* left: 30px; height: 70px; */
+            left: 0;    
+            padding: 3px;
             height: -webkit-fill-available;
         }
 
@@ -58,6 +57,7 @@
         text-shadow: 1px 1px 2px rgba(0,0,0,0.4);
     }
     /* Icon cài đặt */
+
     .settings-icon {
         position: absolute;
         right: 30px;
@@ -70,8 +70,8 @@
         .settings-icon:hover {
             color: white;
         }
-
     /* DANH SÁCH BỆNH NHÂN */
+
     .patient-list {
         margin: 10px auto 80px; /* chừa chỗ cho ticker + footer */
         width: 100%;
@@ -85,6 +85,7 @@
             border-bottom: 1px solid #e0e6ed;
             font-size: 1.6rem;
             text-align: center;
+            width: 33.33%;
             font-weight: bold;
         }
 
@@ -107,21 +108,29 @@
     .status-empty {
         color: #009933;
     }
-    @@keyframes blink {
-        from
 
-    {
+    @@keyframes blink {
+        from {
+            opacity: 1;
+        }
+
+        to {
+            opacity: 0.4;
+        }
+    }
+    /* Đảm bảo ticker wrapper không bị tràn */
+
+    .ticker-wrapper {
+        overflow: hidden;
+        position: relative;
+    }
+    /* Nếu cần thêm delay để data load xong */
+
+    .ticker-content.loaded {
         opacity: 1;
     }
-
-    to {
-        opacity: 0.4;
-    }
-
-    }
-
     /* QUA LƯỢT */
-    /* QUA LƯỢT */
+
     .ticker-wrapper {
         display: flex;
         align-items: center;
@@ -132,7 +141,6 @@
         width: 100%;
         box-shadow: 0 -2px 8px rgba(0,0,0,0.2);
         overflow: hidden; /* Quan trọng: ẩn nội dung tràn */
-        height: 60px; /* Chiều cao cố định */
     }
 
     .ticker-title {
@@ -152,19 +160,19 @@
         flex: 1;
         overflow: hidden; /* Quan trọng: ẩn nội dung tràn */
         position: relative;
-        height: 100%;
+        height: 98%;
     }
 
     .ticker-content {
         display: inline-block;
         white-space: nowrap;
-        padding-left: 100%; /* Bắt đầu từ bên phải ngoài màn hình */
-        animation: scroll-left 15s linear infinite;
+        animation: scroll-left 13s linear infinite;
+        padding-left: 150%;
+        opacity: 0;
     }
-
     .ticker-item {
         display: inline-block;
-        padding: 12px 25px;
+        padding: 10px 25px;
         margin: 0 15px;
         background: #cce7ff; /* xanh biển nhạt */
         border-radius: 25px;
@@ -175,19 +183,19 @@
     }
 
     @@keyframes scroll-left {
-        0%
+        0% {
+            transform: translateX(0);
+            opacity: 1; 
+        }
 
-    {
-        transform: translateX(0);
-    }
-
-    100% {
-        transform: translateX(-100%);
-    }
-
-    }
+        100% {
+            transform: translateX(-100%);
+            opacity: 1;
+        }
+    } 
 
     /* FOOTER */
+
     .footer {
         position: fixed;
         bottom: 0;
@@ -206,15 +214,15 @@
         padding: 0 2px;
     }
     /* item mặc định */
+
     .dropdown-item {
         padding: 6px 12px;
         cursor: pointer;
         color: #000; /* chữ đen */
     }
-
         /* item đang chọn (hover hoặc active bằng phím mũi tên) */
-        .dropdown-item.active,
-        .dropdown-item:hover {
+
+        .dropdown-item.active, .dropdown-item:hover {
             background-color: #e6e6e6 !important; /* xám nhạt */
             color: #000 !important; /* giữ chữ đen */
         }
@@ -261,9 +269,8 @@
             </div>
         </div>
     </div>
-    <!-- FOOTER -->
     <div class="footer">
-        © 2025 Công ty TNHH Giải Pháp Phần Mềm Y Tế | Địa chỉ: 123 Đường ABC, TP.HCM | Hotline: 0909 123 456 | Website: www.congtyyte.vn
+        © Công Ty TNHH TM DV SX Vũ Phong | Địa chỉ: 78/14 Nguyễn Thị Tú - P. Bình Hưng Hòa B - Q. Bình Tân - Tp. HCM | Hotline: 0901 878 896 | Email: sixossoft@gmail.com
     </div>
 
 
@@ -312,6 +319,7 @@
         </div>
     </div>
 </div>
+
 @section Scripts {
     <script src="/dist/js/BienChung.js"></script>
 
@@ -320,5 +328,5 @@
     <script src="\dist\lib\bootstrap\dist\js\bootstrap.bundle.min.js" defer></script>
     <script src="\dist\js\LoadSoThuTuPhongJs.js" asp-append-version="true" defer></script>
 
-
+    
 }
