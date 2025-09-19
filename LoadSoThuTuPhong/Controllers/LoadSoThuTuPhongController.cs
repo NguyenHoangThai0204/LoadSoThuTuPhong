@@ -90,6 +90,7 @@ namespace LoadSoThuTuPhong.Controllers
 
             return 2; // Giá trị mặc định nếu không đọc được
         }
+
         [HttpPost("filter")]
         public async Task<IActionResult> LoadSTT(long IdPhongBuong, long IdChiNhanh)
         {
@@ -97,32 +98,96 @@ namespace LoadSoThuTuPhong.Controllers
 
             if (!result.Success)
             {
-                return Json(new { success = false, message = result.Message, data = new List<object>() });
+                return Json(new
+                {
+                    success = false,
+                    message = result.Message,
+                    data = new List<object>(),
+                    thoiGian = 5000,
+                    soDong = 5
+                });
             }
 
-            // Ép kiểu an toàn
-            var list = result.Data as IEnumerable<LoadSoThuTuPhongModel>;
-            if (list == null)
+            // Sử dụng reflection để kiểm tra dynamic object
+            if (result.Data != null)
             {
-                return Json(new { success = false, message = "Sai định dạng dữ liệu", data = new List<object>() });
+                var dataType = result.Data.GetType();
+                var dataProperty = dataType.GetProperty("Data");
+                var thoiGianProperty = dataType.GetProperty("ThoiGian");
+                var soDongProperty = dataType.GetProperty("SoDong");
+
+                if (dataProperty != null && thoiGianProperty != null && soDongProperty != null)
+                {
+                    var dataValue = dataProperty.GetValue(result.Data);
+                    var thoiGianValue = thoiGianProperty.GetValue(result.Data);
+                    var soDongValue = soDongProperty.GetValue(result.Data);
+
+                    // Ép kiểu dataValue thành List<LoadSoThuTuPhongModel>
+                    var dataList = dataValue as IEnumerable<LoadSoThuTuPhongModel>;
+
+                    if (dataList == null)
+                    {
+                        return Json(new
+                        {
+                            success = false,
+                            message = "Sai định dạng dữ liệu",
+                            data = new List<object>(),
+                            thoiGian = 5,
+                            soDong = 5
+                        });
+                    }
+
+                    var formattedData = dataList
+                        .Select(x => new {
+                            soThuTu = x.SoThuTu,
+                            tenBN = x.TenBN,
+                            trangThai = x.TrangThai
+                        })
+                        .ToList();
+
+                    return Json(new
+                    {
+                        success = true,
+                        message = result.Message,
+                        data = formattedData,
+                        thoiGian = thoiGianValue ?? 5,
+                        soDong = soDongValue ?? 5
+                    });
+                }
             }
 
-            var dataList = list
-                .Select(x => new {
-                    soThuTu = x.SoThuTu,
-                    tenBN = x.TenBN,
-                    trangThai = x.TrangThai
-                })
-                .ToList();
+            // Fallback cho trường hợp cũ
+            var list = result.Data as IEnumerable<LoadSoThuTuPhongModel>;
+            if (list != null)
+            {
+                var dataList = list
+                    .Select(x => new {
+                        soThuTu = x.SoThuTu,
+                        tenBN = x.TenBN,
+                        trangThai = x.TrangThai
+                    })
+                    .ToList();
+
+                return Json(new
+                {
+                    success = true,
+                    message = result.Message,
+                    data = dataList,
+                    thoiGian = 5,
+                    soDong = 5
+                });
+            }
 
             return Json(new
             {
-                success = true,
-                message = result.Message,
-                data = dataList
+                success = false,
+                message = "Sai định dạng dữ liệu",
+                data = new List<object>(),
+                thoiGian = 5,
+                soDong = 5
             });
         }
-
+       
 
 
     }

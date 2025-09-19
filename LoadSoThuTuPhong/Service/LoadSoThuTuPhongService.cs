@@ -20,40 +20,58 @@ namespace LoadSoThuTuPhong.Service
             _logger = logger;
             _httpContextAccessor = httpContextAccessor;
         }
-
         public async Task<(bool Success, string Message, object Data)>
             FilterSoThuTuPhong(long IdPhongBuong, long IdChiNhanh)
         {
             try
             {
+                double thoiGianCapNhat = 5000;
+                int soDongHienThi = 5;
 
-                _logger.LogInformation("STT={STT}, TenBN={TenBN}",
-                       IdPhongBuong,
-                       IdChiNhanh);
-
-                var allData = await _dbService.LoadSoThuTuPhongModels
-                 .FromSqlRaw("EXEC LoadSoThuTuPhong @IdPhongBuong, @IdChiNhanh",
-                     new SqlParameter("@IdPhongBuong", IdPhongBuong),
-                     new SqlParameter("@IdChiNhanh", IdChiNhanh))
-                 .AsNoTracking()
-                 .ToListAsync();
-
-                // Log chi tiết từng record
-                foreach (var item in allData)
+                // Xử lý lấy cấu hình với try-catch
+                try
                 {
-                    _logger.LogInformation("STT={STT}, TenBN={TenBN}, TrangThai={TrangThai}",
-                        item.SoThuTu,
-                        item.TenBN,
-                        item.TrangThai);
+                    var caiDat = await _dbService.HT_CaiDatSTT
+                         .FirstOrDefaultAsync(x => x.Loai == "Phong");
+
+                    if (caiDat != null)
+                    {
+                        thoiGianCapNhat = caiDat.ThoiGian;
+                        soDongHienThi = caiDat.SoDong ?? 5;
+
+                    }
                 }
-                // Nếu allData rỗng, trả về trống
+                catch (Exception configEx)
+                {
+                    _logger.LogWarning(configEx, "Không thể lấy cấu hình từ HT_CaiDatSTT, sử dụng mặc định");
+                }
+
+                _logger.LogInformation("Được gọi lại");
+                var allData = await _dbService.LoadSoThuTuPhongModels
+                    .FromSqlRaw("EXEC LoadSoThuTuPhong @IdPhongBuong, @IdChiNhanh",
+                        new SqlParameter("@IdPhongBuong", IdPhongBuong),
+                        new SqlParameter("@IdChiNhanh", IdChiNhanh))
+                    .AsNoTracking()
+                    .ToListAsync();
+
+           
                 if (!allData.Any())
                 {
-                    return (true, "Không có dữ liệu", new { Paged = new List<object>(), Full = new List<object>() });
+                    return (true, "Không có dữ liệu", new
+                    {
+                        Paged = new List<object>(),
+                        Full = new List<object>(),
+                        ThoiGian = thoiGianCapNhat,
+                        SoDong = soDongHienThi
+                    });
                 }
 
-
-                return (true, "Thành công", allData);
+                return (true, "Thành công", new
+                {
+                    Data = allData,
+                    ThoiGian = thoiGianCapNhat,
+                    SoDong = soDongHienThi
+                });
             }
             catch (Exception ex)
             {
@@ -61,5 +79,6 @@ namespace LoadSoThuTuPhong.Service
                 return (false, ex.Message, null);
             }
         }
+        
     }
 }

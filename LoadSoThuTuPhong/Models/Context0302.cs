@@ -11,10 +11,12 @@ namespace LoadSoThuTuPhong.Models
         public DbSet<ThongTinDoanhNghiep> ThongTinDoanhNghieps { get; set; }
 
         public DbSet<LoadSoThuTuPhongModel> LoadSoThuTuPhongModels { get; set; }
+        public DbSet<HT_CaiDatSTT> HT_CaiDatSTT { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<ThongTinDoanhNghiep>().HasNoKey();
             modelBuilder.Entity<LoadSoThuTuPhongModel>().HasNoKey();
+            modelBuilder.Entity<HT_CaiDatSTT>().HasNoKey();
         }
 
         public bool TestConnection()
