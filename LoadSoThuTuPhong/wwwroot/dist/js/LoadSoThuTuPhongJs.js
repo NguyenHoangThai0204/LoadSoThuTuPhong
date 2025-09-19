@@ -26,11 +26,19 @@ async function loadSTT(idPhongBuong, idChiNhanh) {
 
         const json = await res.json();
 
+        // DEBUG QUAN TRỌNG: kiểm tra giá trị từ server
+        console.log("=== DEBUG ===");
+        console.log("ThoiGian từ server:", json.thoiGian);
+        console.log("SoDong từ server:", json.soDong);
+        console.log("Số lượng data:", json.data.length);
+        console.log("Dữ liệu data:", json.data);
+        console.log("=============");
 
         const data = json.data || [];
-        const intervalTime = (json.thoiGian || 5000) ;
+        const intervalTime = (json.thoiGian || 5) * 1000;
         const soDongHienThi = json.soDong || 5; // Lấy từ server
 
+        console.log("Số dòng sẽ hiển thị:", soDongHienThi);
         // ===== Main Table =====console.log("API Response:", json);
         const tbody = document.getElementById("sttList");
         if (tbody) {
@@ -103,6 +111,95 @@ async function loadSTT(idPhongBuong, idChiNhanh) {
         currentInterval = setTimeout(() => loadSTT(idPhongBuong, idChiNhanh), 5000);
     }
 }
+//async function loadSTT(idPhongBuong, idChiNhanh) {
+//    if (!idPhongBuong || isNaN(idPhongBuong) || idPhongBuong <= 0 || !idChiNhanh) {
+//        console.error("Invalid parameters. Stopping loadSTT.", { idPhongBuong, idChiNhanh });
+//        return;
+//    }
+
+//    try {
+//        const res = await fetch(`/load_so_thu_tu_phong/filter?IdPhongBuong=${idPhongBuong}&IdChiNhanh=${idChiNhanh}`, {
+//            method: "POST"
+//        });
+
+//        if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+
+//        const json = await res.json();
+//        const data = json.data || [];
+//        const intervalTime = (json.ThoiGian || 5) * 1000;
+
+//        // ===== Main Table =====
+//        const tbody = document.getElementById("sttList");
+//        if (tbody) {
+//            tbody.innerHTML = "";
+//            let mainData = data.filter(item => !(item.SoLanGoi === 1 && item.BatDauXuLy === 1));
+
+//            mainData.sort((a, b) => {
+//                if (a.trangThai === 4 && b.trangThai !== 4) return 1;
+//                if (a.trangThai !== 4 && b.trangThai === 4) return -1;
+//                return a.soThuTu - b.soThuTu;
+//            });
+
+//            mainData = mainData.slice(0, 5);
+
+//            if (!mainData.length) {
+//                tbody.innerHTML = `<tr><td colspan="3" class="text-center py-3">Không có số thứ tự</td></tr>`;
+//            } else {
+//                mainData.forEach(item => {
+//                    if (item.trangThai === 4) return; // Skip status 4 for main table
+
+//                    const tr = document.createElement("tr");
+//                    let statusClass = "", statusText = "";
+
+//                    if (item.trangThai === 1) {
+//                        statusClass = "status-invite";
+//                        statusText = "Đang mời";
+//                    } else if (item.trangThai === 2) {
+//                        statusClass = "status-wait";
+//                        statusText = "Chuẩn bị";
+//                    } else if (item.trangThai === 3) {
+//                        statusClass = "status-empty";
+//                        statusText = "Chờ tới lượt";
+//                    }
+
+//                    tr.innerHTML = `
+//                        <td>${item.soThuTu}</td>
+//                        <td>${item.tenBN}</td>
+//                        <td class="${statusClass}">${statusText}</td>
+//                    `;
+//                    tbody.appendChild(tr);
+//                });
+//            }
+//        }
+
+//        // ===== Missed Patients Ticker =====
+//        const quaLuotContainer = document.getElementById("quaLuotList");
+//        if (quaLuotContainer) {
+//            quaLuotContainer.innerHTML = "";
+//            const quaLuotData = data.filter(item => item.trangThai === 4);
+
+//            if (!quaLuotData.length) {
+//                quaLuotContainer.innerHTML = `<span class="badge bg-secondary-subtle text-secondary px-3 py-2"></span>`;
+//            } else {
+//                quaLuotData.forEach(item => {
+//                    const pill = document.createElement("div");
+//                    pill.className = "ticker-item";
+//                    pill.innerText = `${item.tenBN} - STT ${item.soThuTu}`;
+//                    quaLuotContainer.appendChild(pill);
+//                });
+//            }
+//        }
+
+//        // Restart interval
+//        if (currentInterval) clearTimeout(currentInterval);
+//        currentInterval = setTimeout(() => loadSTT(idPhongBuong, idChiNhanh), intervalTime);
+
+//    } catch (err) {
+//        console.error("Error loading STT:", err);
+//        if (currentInterval) clearTimeout(currentInterval);
+//        currentInterval = setTimeout(() => loadSTT(idPhongBuong, idChiNhanh), 5000);
+//    }
+//}
 
 // ===== Search Dropdown Component =====
 function initSearchDropdown({ inputId, dropdownId, hiddenFieldId, data = [], onSelect }) {
@@ -293,47 +390,44 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 });
 
-// ===== EVENT LISTENERS =====
-// ===== BACKSPACE TRÊN INPUT PHÒNG =====
+// XÓA PHÒNG BẰNG BACKSPACE (FULL CLEAR)
 document.getElementById("searchPhong").addEventListener("keydown", function (e) {
-    if (e.key === "Backspace") {
-        if ($("#selectedPhongId").val()) {
-            e.preventDefault(); // ngăn xoá từng ký tự
-            this.value = "";    // xoá toàn bộ input
-            $("#selectedPhongId").val("");
-            enterAfterSelectPhong = false;
+    if (e.key === "Backspace" && $("#selectedPhongId").val()) {
+        e.preventDefault(); // chặn xoá từng ký tự
+        this.value = "";
+        $("#selectedPhongId").val("");
+        enterAfterSelectPhong = false;
 
-            // reset dropdown phòng
-            if (phongDropdown) {
-                phongDropdown.setData(listPhong);
-                $("#dropdownPhong").empty();
-                phongDropdown.renderDropdown("", listPhong);
-            }
+        if (phongDropdown) {
+            const khoaId = parseInt($("#selectedKhoaId").val(), 10);
+            const filteredPhong = (!isNaN(khoaId) && khoaId > 0)
+                ? listPhong.filter(p => p.idKhoa === khoaId)
+                : listPhong;
+
+            phongDropdown.setData(filteredPhong);
+            $("#dropdownPhong").empty();
+            phongDropdown.renderDropdown("", filteredPhong);
         }
     }
 });
 
-// ===== BACKSPACE TRÊN INPUT KHOA =====
+// XÓA KHOA BẰNG BACKSPACE (FULL CLEAR)
 document.getElementById("searchKhoa").addEventListener("keydown", function (e) {
-    if (e.key === "Backspace") {
-        if ($("#selectedKhoaId").val()) {
-            e.preventDefault(); // ngăn xoá từng ký tự
-            this.value = "";    // xoá toàn bộ input
-            $("#selectedKhoaId").val("");
-            $("#searchPhong").val("");
-            $("#selectedPhongId").val("");
-            enterAfterSelectPhong = false;
+    if (e.key === "Backspace" && $("#selectedKhoaId").val()) {
+        e.preventDefault(); // chặn xoá từng ký tự
+        this.value = "";
+        $("#selectedKhoaId").val("");
+        $("#searchPhong").val("");
+        $("#selectedPhongId").val("");
+        enterAfterSelectPhong = false;
 
-            // reset dropdown khoa + phòng
-            if (phongDropdown) {
-                phongDropdown.setData(listPhong);
-                $("#dropdownPhong").empty();
-            }
-            if (khoaDropdown) {
-                khoaDropdown.setData(listKhoa);
-                khoaDropdown.renderDropdown("", listKhoa);
-            }
+        if (phongDropdown) {
+            phongDropdown.setData(listPhong);
+            $("#dropdownPhong").empty();
+        }
+        if (khoaDropdown) {
+            khoaDropdown.setData(listKhoa);
+            khoaDropdown.renderDropdown("", listKhoa);
         }
     }
 });
-
