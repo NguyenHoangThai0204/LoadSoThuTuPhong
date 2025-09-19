@@ -3,16 +3,16 @@
   "WorkspaceRootPath": "D:\\Sixos\\LoadSoThuTuPhong\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{3769565B-64DF-45E3-B163-251139A8414D}|LoadSoThuTuPhong\\LoadSoThuTuPhong.csproj|d:\\sixos\\loadsothutuphong\\loadsothutuphong\\controllers\\loadsothutuphongcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{3769565B-64DF-45E3-B163-251139A8414D}|LoadSoThuTuPhong\\LoadSoThuTuPhong.csproj|solutionrelative:loadsothutuphong\\controllers\\loadsothutuphongcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{3769565B-64DF-45E3-B163-251139A8414D}|LoadSoThuTuPhong\\LoadSoThuTuPhong.csproj|d:\\sixos\\loadsothutuphong\\loadsothutuphong\\wwwroot\\dist\\js\\loadsothutuphongjs.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
       "RelativeMoniker": "D:0:0:{3769565B-64DF-45E3-B163-251139A8414D}|LoadSoThuTuPhong\\LoadSoThuTuPhong.csproj|solutionrelative:loadsothutuphong\\wwwroot\\dist\\js\\loadsothutuphongjs.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{3769565B-64DF-45E3-B163-251139A8414D}|LoadSoThuTuPhong\\LoadSoThuTuPhong.csproj|d:\\sixos\\loadsothutuphong\\loadsothutuphong\\service\\loadsothutuphongservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{3769565B-64DF-45E3-B163-251139A8414D}|LoadSoThuTuPhong\\LoadSoThuTuPhong.csproj|solutionrelative:loadsothutuphong\\service\\loadsothutuphongservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3769565B-64DF-45E3-B163-251139A8414D}|LoadSoThuTuPhong\\LoadSoThuTuPhong.csproj|d:\\sixos\\loadsothutuphong\\loadsothutuphong\\controllers\\loadsothutuphongcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3769565B-64DF-45E3-B163-251139A8414D}|LoadSoThuTuPhong\\LoadSoThuTuPhong.csproj|solutionrelative:loadsothutuphong\\controllers\\loadsothutuphongcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -22,46 +22,55 @@
       "DocumentGroups": [
         {
           "DockedHeight": 33,
-          "SelectedChildIndex": 0,
+          "SelectedChildIndex": 1,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 2,
               "Title": "LoadSoThuTuPhongController.cs",
               "DocumentMoniker": "D:\\Sixos\\LoadSoThuTuPhong\\LoadSoThuTuPhong\\Controllers\\LoadSoThuTuPhongController.cs",
               "RelativeDocumentMoniker": "LoadSoThuTuPhong\\Controllers\\LoadSoThuTuPhongController.cs",
               "ToolTip": "D:\\Sixos\\LoadSoThuTuPhong\\LoadSoThuTuPhong\\Controllers\\LoadSoThuTuPhongController.cs",
               "RelativeToolTip": "LoadSoThuTuPhong\\Controllers\\LoadSoThuTuPhongController.cs",
-              "ViewState": "AgIAAJoAAAAAAAAAAAAkwKYAAAAoAAAAAAAAAA==",
+              "ViewState": "AgIAAJcAAAAAAAAAAAAkwGUAAAARAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-09-19T05:06:48.87Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-09-19T05:06:48.87Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 0,
               "Title": "LoadSoThuTuPhongJs.js",
               "DocumentMoniker": "D:\\Sixos\\LoadSoThuTuPhong\\LoadSoThuTuPhong\\wwwroot\\dist\\js\\LoadSoThuTuPhongJs.js",
               "RelativeDocumentMoniker": "LoadSoThuTuPhong\\wwwroot\\dist\\js\\LoadSoThuTuPhongJs.js",
               "ToolTip": "D:\\Sixos\\LoadSoThuTuPhong\\LoadSoThuTuPhong\\wwwroot\\dist\\js\\LoadSoThuTuPhongJs.js",
               "RelativeToolTip": "LoadSoThuTuPhong\\wwwroot\\dist\\js\\LoadSoThuTuPhongJs.js",
-              "ViewState": "AgIAADUAAAAAAAAAAAAAwAAAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAACYBAAAAAAAAAAAQwDcBAAAJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
               "WhenOpened": "2025-09-19T05:03:20.266Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 1,
               "Title": "LoadSoThuTuPhongService.cs",
               "DocumentMoniker": "D:\\Sixos\\LoadSoThuTuPhong\\LoadSoThuTuPhong\\Service\\LoadSoThuTuPhongService.cs",
               "RelativeDocumentMoniker": "LoadSoThuTuPhong\\Service\\LoadSoThuTuPhongService.cs",
               "ToolTip": "D:\\Sixos\\LoadSoThuTuPhong\\LoadSoThuTuPhong\\Service\\LoadSoThuTuPhongService.cs",
               "RelativeToolTip": "LoadSoThuTuPhong\\Service\\LoadSoThuTuPhongService.cs",
-              "ViewState": "AgIAACcAAAAAAAAAAAAYwEUAAAARAAAAAAAAAA==",
+              "ViewState": "AgIAABgAAAAAAAAAAAAYwA0AAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-09-19T04:59:45.307Z",
               "EditorCaption": ""
+            }
+          ]
+        },
+        {
+          "DockedHeight": 2,
+          "SelectedChildIndex": -1,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{34e76e81-ee4a-11d0-ae2e-00a0c90fffc3}"
             }
           ]
         }

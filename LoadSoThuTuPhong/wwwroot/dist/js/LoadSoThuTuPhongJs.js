@@ -294,24 +294,46 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 // ===== EVENT LISTENERS =====
+// ===== BACKSPACE TRÊN INPUT PHÒNG =====
 document.getElementById("searchPhong").addEventListener("keydown", function (e) {
     if (e.key === "Backspace") {
-        this.value = "";
-        $("#selectedPhongId").val("");
-        enterAfterSelectPhong = false;
-        const event = new Event('input', { bubbles: true });
-        this.dispatchEvent(event);
+        if ($("#selectedPhongId").val()) {
+            e.preventDefault(); // ngăn xoá từng ký tự
+            this.value = "";    // xoá toàn bộ input
+            $("#selectedPhongId").val("");
+            enterAfterSelectPhong = false;
+
+            // reset dropdown phòng
+            if (phongDropdown) {
+                phongDropdown.setData(listPhong);
+                $("#dropdownPhong").empty();
+                phongDropdown.renderDropdown("", listPhong);
+            }
+        }
     }
 });
 
+// ===== BACKSPACE TRÊN INPUT KHOA =====
 document.getElementById("searchKhoa").addEventListener("keydown", function (e) {
     if (e.key === "Backspace") {
-        this.value = "";
-        $("#selectedKhoaId").val("");
-        $("#searchPhong").val("");
-        $("#selectedPhongId").val("");
-        enterAfterSelectPhong = false;
-        if (phongDropdown) { phongDropdown.setData(listPhong); $("#dropdownPhong").empty(); }
-        if (khoaDropdown) { khoaDropdown.setData(listKhoa); khoaDropdown.renderDropdown("", listKhoa); }
+        if ($("#selectedKhoaId").val()) {
+            e.preventDefault(); // ngăn xoá từng ký tự
+            this.value = "";    // xoá toàn bộ input
+            $("#selectedKhoaId").val("");
+            $("#searchPhong").val("");
+            $("#selectedPhongId").val("");
+            enterAfterSelectPhong = false;
+
+            // reset dropdown khoa + phòng
+            if (phongDropdown) {
+                phongDropdown.setData(listPhong);
+                $("#dropdownPhong").empty();
+            }
+            if (khoaDropdown) {
+                khoaDropdown.setData(listKhoa);
+                khoaDropdown.renderDropdown("", listKhoa);
+            }
+        }
     }
 });
+
