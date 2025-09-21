@@ -103,6 +103,7 @@
 
     .status-wait {
         color: #ff8800;
+        animation: blink 1s infinite alternate;
     }
 
     .status-empty {
@@ -137,7 +138,7 @@
         background: #005999; /* xanh dương đậm */
         color: white;
         position: fixed;
-        bottom: 40px; /* chừa chỗ cho footer */
+        bottom: 60px; /* chừa chỗ cho footer */
         width: 105%;
         left: -3px;
         box-shadow: 0 -2px 8px rgba(0,0,0,0.2);
@@ -148,7 +149,7 @@
         flex: 0 0 auto;
         background: #004477;
         padding: 15px 25px;
-        font-size: 1.6rem;
+        font-size: 2rem;
         font-weight: bold;
         text-transform: uppercase;
         border-right: 2px solid #003366;
@@ -177,7 +178,7 @@
         margin: 0 15px;
         background: #cce7ff; /* xanh biển nhạt */
         border-radius: 25px;
-        font-size: 1.6rem;
+        font-size: 1.9rem;
         font-weight: bold;
         color: #004477; /* xanh biển đậm */
         box-shadow: 0 3px 6px rgba(0,0,0,0.25);
@@ -200,13 +201,13 @@
     .footer {
         position: fixed;
         bottom: 0;
-        width: 105%;
-        left : -3px;
+        width: 100%;
+        left : 0;
         background: #003366;
         color: #cccccc; /* chữ chìm */
         text-align: center;
         padding: 6px 10px;
-        font-size: 1.1rem; /* nhỏ hơn */
+        font-size: 1.4rem; /* nhỏ hơn */
         font-weight: normal;
     }
 
@@ -251,9 +252,8 @@
     <table class="patient-list">
         <thead>
             <tr>
-                <th>Số thứ tự</th>
-                <th>Họ và tên</th>
-                <th>Trạng thái</th>
+                <th style="font-size: 4rem;">TÌNH TRẠNG</th>
+                <th style="font-size: 4rem;">STT</th>
             </tr>
         </thead>
         <tbody id="sttList">

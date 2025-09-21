@@ -35,53 +35,58 @@ async function loadSTT(idPhongBuong, idChiNhanh) {
         console.log("=============");
 
         const data = json.data || [];
-        const intervalTime = (json.thoiGian || 5) * 1000;
+        const intervalTime = (json.thoiGian || 5);
         const soDongHienThi = json.soDong || 5; // Lấy từ server
 
         console.log("Số dòng sẽ hiển thị:", soDongHienThi);
-        // ===== Main Table =====console.log("API Response:", json);
+        // ===== Main Table =====
         const tbody = document.getElementById("sttList");
         if (tbody) {
             tbody.innerHTML = "";
+
+            // lọc bỏ bản ghi không cần thiết
             let mainData = data.filter(item => !(item.SoLanGoi === 1 && item.BatDauXuLy === 1));
 
+            // sắp xếp
             mainData.sort((a, b) => {
                 if (a.trangThai === 4 && b.trangThai !== 4) return 1;
                 if (a.trangThai !== 4 && b.trangThai === 4) return -1;
                 return a.soThuTu - b.soThuTu;
             });
 
-            mainData = mainData.slice(0, soDongHienThi); // Sử dụng số dòng từ server
+            // chỉ lấy 3 bản ghi
+            mainData = mainData.slice(0, 3);
 
             if (!mainData.length) {
-                tbody.innerHTML = `<tr><td colspan="3" class="text-center py-3">Không có số thứ tự</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="2" class="text-center py-3">Không có số thứ tự</td></tr>`;
             } else {
-                mainData.forEach(item => {
-                    if (item.trangThai === 4) return;
+                // tách bản ghi đang thực hiện
+                const dangThucHien = mainData.find(item => item.trangThai === 1);
+                const dangCho = mainData.filter(item => item.trangThai !== 1);
 
+                // 1. hàng đang thực hiện
+                if (dangThucHien) {
                     const tr = document.createElement("tr");
-                    let statusClass = "", statusText = "";
-
-                    if (item.trangThai === 1) {
-                        statusClass = "status-invite";
-                        statusText = "Đang mời";
-                    } else if (item.trangThai === 2) {
-                        statusClass = "status-wait";
-                        statusText = "Chuẩn bị";
-                    } else if (item.trangThai === 3) {
-                        statusClass = "status-empty";
-                        statusText = "Chờ tới lượt";
-                    }
-
                     tr.innerHTML = `
-                        <td>${item.soThuTu}</td>
-                        <td>${item.tenBN}</td>
-                        <td class="${statusClass}">${statusText}</td>
-                    `;
+                <td style="font-size: 5rem;" class="status-wait">Đang khám</td>
+                <td style="font-size: 6rem;">${dangThucHien.soThuTu}</td>
+            `;
                     tbody.appendChild(tr);
-                });
+                }
+
+                // 2. hàng đang chờ (nối chuỗi STT)
+                if (dangCho.length > 0) {
+                    const sttList = dangCho.map(x => x.soThuTu).join(", ");
+                    const tr = document.createElement("tr");
+                    tr.innerHTML = `
+                <td style="font-size: 5rem;"class="status-empty">Chuẩn bị</td>
+                <td style="font-size: 6rem;">${sttList}</td>
+            `;
+                    tbody.appendChild(tr);
+                }
             }
         }
+
 
         // ===== Missed Patients Ticker =====
         const quaLuotContainer = document.getElementById("quaLuotList");
@@ -95,7 +100,7 @@ async function loadSTT(idPhongBuong, idChiNhanh) {
                 quaLuotData.forEach(item => {
                     const pill = document.createElement("div");
                     pill.className = "ticker-item";
-                    pill.innerText = `${item.tenBN} - STT ${item.soThuTu}`;
+                    pill.innerText = ` STT ${item.soThuTu}`;
                     quaLuotContainer.appendChild(pill);
                 });
             }
@@ -111,95 +116,6 @@ async function loadSTT(idPhongBuong, idChiNhanh) {
         currentInterval = setTimeout(() => loadSTT(idPhongBuong, idChiNhanh), 5000);
     }
 }
-//async function loadSTT(idPhongBuong, idChiNhanh) {
-//    if (!idPhongBuong || isNaN(idPhongBuong) || idPhongBuong <= 0 || !idChiNhanh) {
-//        console.error("Invalid parameters. Stopping loadSTT.", { idPhongBuong, idChiNhanh });
-//        return;
-//    }
-
-//    try {
-//        const res = await fetch(`/load_so_thu_tu_phong/filter?IdPhongBuong=${idPhongBuong}&IdChiNhanh=${idChiNhanh}`, {
-//            method: "POST"
-//        });
-
-//        if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
-
-//        const json = await res.json();
-//        const data = json.data || [];
-//        const intervalTime = (json.ThoiGian || 5) * 1000;
-
-//        // ===== Main Table =====
-//        const tbody = document.getElementById("sttList");
-//        if (tbody) {
-//            tbody.innerHTML = "";
-//            let mainData = data.filter(item => !(item.SoLanGoi === 1 && item.BatDauXuLy === 1));
-
-//            mainData.sort((a, b) => {
-//                if (a.trangThai === 4 && b.trangThai !== 4) return 1;
-//                if (a.trangThai !== 4 && b.trangThai === 4) return -1;
-//                return a.soThuTu - b.soThuTu;
-//            });
-
-//            mainData = mainData.slice(0, 5);
-
-//            if (!mainData.length) {
-//                tbody.innerHTML = `<tr><td colspan="3" class="text-center py-3">Không có số thứ tự</td></tr>`;
-//            } else {
-//                mainData.forEach(item => {
-//                    if (item.trangThai === 4) return; // Skip status 4 for main table
-
-//                    const tr = document.createElement("tr");
-//                    let statusClass = "", statusText = "";
-
-//                    if (item.trangThai === 1) {
-//                        statusClass = "status-invite";
-//                        statusText = "Đang mời";
-//                    } else if (item.trangThai === 2) {
-//                        statusClass = "status-wait";
-//                        statusText = "Chuẩn bị";
-//                    } else if (item.trangThai === 3) {
-//                        statusClass = "status-empty";
-//                        statusText = "Chờ tới lượt";
-//                    }
-
-//                    tr.innerHTML = `
-//                        <td>${item.soThuTu}</td>
-//                        <td>${item.tenBN}</td>
-//                        <td class="${statusClass}">${statusText}</td>
-//                    `;
-//                    tbody.appendChild(tr);
-//                });
-//            }
-//        }
-
-//        // ===== Missed Patients Ticker =====
-//        const quaLuotContainer = document.getElementById("quaLuotList");
-//        if (quaLuotContainer) {
-//            quaLuotContainer.innerHTML = "";
-//            const quaLuotData = data.filter(item => item.trangThai === 4);
-
-//            if (!quaLuotData.length) {
-//                quaLuotContainer.innerHTML = `<span class="badge bg-secondary-subtle text-secondary px-3 py-2"></span>`;
-//            } else {
-//                quaLuotData.forEach(item => {
-//                    const pill = document.createElement("div");
-//                    pill.className = "ticker-item";
-//                    pill.innerText = `${item.tenBN} - STT ${item.soThuTu}`;
-//                    quaLuotContainer.appendChild(pill);
-//                });
-//            }
-//        }
-
-//        // Restart interval
-//        if (currentInterval) clearTimeout(currentInterval);
-//        currentInterval = setTimeout(() => loadSTT(idPhongBuong, idChiNhanh), intervalTime);
-
-//    } catch (err) {
-//        console.error("Error loading STT:", err);
-//        if (currentInterval) clearTimeout(currentInterval);
-//        currentInterval = setTimeout(() => loadSTT(idPhongBuong, idChiNhanh), 5000);
-//    }
-//}
 
 // ===== Search Dropdown Component =====
 function initSearchDropdown({ inputId, dropdownId, hiddenFieldId, data = [], onSelect }) {
