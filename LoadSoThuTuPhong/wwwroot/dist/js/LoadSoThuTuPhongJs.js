@@ -39,23 +39,23 @@ async function loadSTT(idPhongBuong, idChiNhanh) {
         const soDongHienThi = json.soDong || 5; // Lấy từ server
 
         console.log("Số dòng sẽ hiển thị:", soDongHienThi);
+
         // ===== Main Table =====
         const tbody = document.getElementById("sttList");
         if (tbody) {
             tbody.innerHTML = "";
 
-            // lọc bỏ bản ghi không cần thiết
-            let mainData = data.filter(item => !(item.SoLanGoi === 1 && item.BatDauXuLy === 1));
+            // lọc bỏ bản ghi không cần thiết + loại luôn qua lượt (trangThai = 4)
+            let mainData = data.filter(item =>
+                !(item.SoLanGoi === 1 && item.BatDauXuLy === 1) &&
+                item.trangThai !== 4
+            );
 
-            // sắp xếp
-            mainData.sort((a, b) => {
-                if (a.trangThai === 4 && b.trangThai !== 4) return 1;
-                if (a.trangThai !== 4 && b.trangThai === 4) return -1;
-                return a.soThuTu - b.soThuTu;
-            });
+            // sắp xếp theo số thứ tự
+            mainData.sort((a, b) => a.soThuTu - b.soThuTu);
 
-            // chỉ lấy 3 bản ghi
-            mainData = mainData.slice(0, 3);
+            // chỉ lấy số bản ghi tối đa từ server
+            mainData = mainData.slice(0, soDongHienThi);
 
             if (!mainData.length) {
                 tbody.innerHTML = `<tr><td colspan="2" class="text-center py-3">Không có số thứ tự</td></tr>`;
@@ -68,9 +68,9 @@ async function loadSTT(idPhongBuong, idChiNhanh) {
                 if (dangThucHien) {
                     const tr = document.createElement("tr");
                     tr.innerHTML = `
-                <td style="font-size: 5rem;" class="status-wait">Đang khám</td>
-                <td style="font-size: 6rem;">${dangThucHien.soThuTu}</td>
-            `;
+                        <td style="font-size: 5rem;" class="status-wait">Đang khám</td>
+                        <td style="font-size: 6rem;">${dangThucHien.soThuTu}</td>
+                    `;
                     tbody.appendChild(tr);
                 }
 
@@ -79,14 +79,13 @@ async function loadSTT(idPhongBuong, idChiNhanh) {
                     const sttList = dangCho.map(x => x.soThuTu).join(", ");
                     const tr = document.createElement("tr");
                     tr.innerHTML = `
-                <td style="font-size: 5rem;"class="status-empty">Chuẩn bị</td>
-                <td style="font-size: 6rem;">${sttList}</td>
-            `;
+                        <td style="font-size: 5rem;" class="status-empty">Chuẩn bị</td>
+                        <td style="font-size: 6rem;">${sttList}</td>
+                    `;
                     tbody.appendChild(tr);
                 }
             }
         }
-
 
         // ===== Missed Patients Ticker =====
         const quaLuotContainer = document.getElementById("quaLuotList");
@@ -108,7 +107,7 @@ async function loadSTT(idPhongBuong, idChiNhanh) {
 
         // Restart interval với thời gian từ server
         if (currentInterval) clearTimeout(currentInterval);
-        currentInterval = setTimeout(() => loadSTT(idPhongBuong, idChiNhanh), intervalTime);
+        currentInterval = setTimeout(() => loadSTT(idPhongBuong, idChiNhanh), intervalTime );
 
     } catch (err) {
         console.error("Error loading STT:", err);
