@@ -16,6 +16,98 @@ function highlightMatch(text, keyword) {
 }
 
 // ===== MAIN FUNCTION: Load Patient Queue Data =====
+//async function loadSTT(idPhongBuong, idChiNhanh) {
+//    try {
+//        const res = await fetch(`/load_so_thu_tu_phong/filter?IdPhongBuong=${idPhongBuong}&IdChiNhanh=${idChiNhanh}`, {
+//            method: "POST"
+//        });
+
+//        if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+
+//        const json = await res.json();
+
+
+//        const data = json.data || [];
+//        const intervalTime = (json.thoiGian || 5);
+//        const soDongHienThi = json.soDong || 5; // Lấy từ server
+
+//        console.log("Số dòng sẽ hiển thị:", soDongHienThi);
+
+//        // ===== Main Table =====
+//        const tbody = document.getElementById("sttList");
+//        if (tbody) {
+//            tbody.innerHTML = "";
+
+//            // lọc bỏ bản ghi không cần thiết + loại luôn qua lượt (trangThai = 4)
+//            let mainData = data.filter(item =>
+//                !(item.SoLanGoi === 1 && item.BatDauXuLy === 1) &&
+//                item.trangThai !== 4
+//            );
+
+//            // sắp xếp theo số thứ tự
+//            mainData.sort((a, b) => a.soThuTu - b.soThuTu);
+
+//            // chỉ lấy số bản ghi tối đa từ server
+//            mainData = mainData.slice(0, soDongHienThi);
+
+//            if (!mainData.length) {
+//                tbody.innerHTML = `<tr><td colspan="2" class="text-center py-3">Không có số thứ tự</td></tr>`;
+//            } else {
+//                // tách bản ghi đang thực hiện
+//                const dangThucHien = mainData.find(item => item.trangThai === 1);
+//                const dangCho = mainData.filter(item => item.trangThai !== 1);
+
+//                // 1. hàng đang thực hiện
+//                if (dangThucHien) {
+//                    const tr = document.createElement("tr");
+//                    tr.innerHTML = `
+//                        <td style="font-size: 5rem; background-color: #ECF3FB !important;" class="status-wait">Đang khám</td>
+//                        <td style="font-size: 6rem;">${dangThucHien.soThuTu}</td>
+//                    `;
+//                    tbody.appendChild(tr);
+//                }
+
+//                // 2. hàng đang chờ (nối chuỗi STT)
+//                if (dangCho.length > 0) {
+//                    const sttList = dangCho.map(x => x.soThuTu).join(", ");
+//                    const tr = document.createElement("tr");
+//                    tr.innerHTML = `
+//                        <td style="font-size: 5rem;background-color: #ECF3FB !important;" class="status-empty">Chuẩn bị</td>
+//                        <td style="font-size: 6rem;">${sttList}</td>
+//                    `;
+//                    tbody.appendChild(tr);
+//                }
+//            }
+//        }
+
+//        // ===== Missed Patients Ticker =====
+//        const quaLuotContainer = document.getElementById("quaLuotList");
+//        if (quaLuotContainer) {
+//            quaLuotContainer.innerHTML = "";
+//            const quaLuotData = data.filter(item => item.trangThai === 4);
+
+//            if (!quaLuotData.length) {
+//                quaLuotContainer.innerHTML = `<span class="badge bg-secondary-subtle text-secondary px-3 py-2"></span>`;
+//            } else {
+//                quaLuotData.forEach(item => {
+//                    const pill = document.createElement("div");
+//                    pill.className = "ticker-item";
+//                    pill.innerText = ` STT ${item.soThuTu}`;
+//                    quaLuotContainer.appendChild(pill);
+//                });
+//            }
+//        }
+
+//        // Restart interval với thời gian từ server
+//        if (currentInterval) clearTimeout(currentInterval);
+//        currentInterval = setTimeout(() => loadSTT(idPhongBuong, idChiNhanh), intervalTime );
+
+//    } catch (err) {
+//        console.error("Error loading STT:", err);
+//        if (currentInterval) clearTimeout(currentInterval);
+//        currentInterval = setTimeout(() => loadSTT(idPhongBuong, idChiNhanh), 5000);
+//    }
+//}
 async function loadSTT(idPhongBuong, idChiNhanh) {
     try {
         const res = await fetch(`/load_so_thu_tu_phong/filter?IdPhongBuong=${idPhongBuong}&IdChiNhanh=${idChiNhanh}`, {
@@ -25,18 +117,9 @@ async function loadSTT(idPhongBuong, idChiNhanh) {
         if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
 
         const json = await res.json();
-
-        // DEBUG QUAN TRỌNG: kiểm tra giá trị từ server
-        console.log("=== DEBUG ===");
-        console.log("ThoiGian từ server:", json.thoiGian);
-        console.log("SoDong từ server:", json.soDong);
-        console.log("Số lượng data:", json.data.length);
-        console.log("Dữ liệu data:", json.data);
-        console.log("=============");
-
         const data = json.data || [];
         const intervalTime = (json.thoiGian || 5);
-        const soDongHienThi = json.soDong || 5; // Lấy từ server
+        const soDongHienThi = json.soDong || 5;
 
         console.log("Số dòng sẽ hiển thị:", soDongHienThi);
 
@@ -45,46 +128,35 @@ async function loadSTT(idPhongBuong, idChiNhanh) {
         if (tbody) {
             tbody.innerHTML = "";
 
-            // lọc bỏ bản ghi không cần thiết + loại luôn qua lượt (trangThai = 4)
-            let mainData = data.filter(item =>
-                !(item.SoLanGoi === 1 && item.BatDauXuLy === 1) &&
-                item.trangThai !== 4
-            );
+            // lọc bỏ bản ghi trạng thái = 4 (qua lượt)
+            let mainData = data.filter(item => item.trangThai !== 4);
 
             // sắp xếp theo số thứ tự
             mainData.sort((a, b) => a.soThuTu - b.soThuTu);
 
-            // chỉ lấy số bản ghi tối đa từ server
+            // giới hạn số dòng hiển thị
             mainData = mainData.slice(0, soDongHienThi);
 
-            if (!mainData.length) {
-                tbody.innerHTML = `<tr><td colspan="2" class="text-center py-3">Không có số thứ tự</td></tr>`;
-            } else {
-                // tách bản ghi đang thực hiện
-                const dangThucHien = mainData.find(item => item.trangThai === 1);
-                const dangCho = mainData.filter(item => item.trangThai !== 1);
+            // tách bản ghi đang thực hiện (trangThai = 1)
+            const dangThucHien = mainData.find(item => item.trangThai === 1);
+            const dangCho = mainData.filter(item => item.trangThai !== 1);
 
-                // 1. hàng đang thực hiện
-                if (dangThucHien) {
-                    const tr = document.createElement("tr");
-                    tr.innerHTML = `
-                        <td style="font-size: 5rem; background-color: #ECF3FB !important;" class="status-wait">Đang khám</td>
-                        <td style="font-size: 6rem;">${dangThucHien.soThuTu}</td>
-                    `;
-                    tbody.appendChild(tr);
-                }
+            // 1. hàng đang thực hiện (luôn có)
+            const tr1 = document.createElement("tr");
+            tr1.innerHTML = `
+                <td style="font-size: 5rem; background-color: #ECF3FB !important;    color: #338BB9 !important;">Đang khám</td>
+                <td style="font-size: 6rem;">${dangThucHien ? dangThucHien.soThuTu : ""}</td>
+            `;
+            tbody.appendChild(tr1);
 
-                // 2. hàng đang chờ (nối chuỗi STT)
-                if (dangCho.length > 0) {
-                    const sttList = dangCho.map(x => x.soThuTu).join(", ");
-                    const tr = document.createElement("tr");
-                    tr.innerHTML = `
-                        <td style="font-size: 5rem;background-color: #ECF3FB !important;" class="status-empty">Chuẩn bị</td>
-                        <td style="font-size: 6rem;">${sttList}</td>
-                    `;
-                    tbody.appendChild(tr);
-                }
-            }
+            // 2. hàng chuẩn bị + chờ (luôn có)
+            const sttList = dangCho.length > 0 ? dangCho.map(x => x.soThuTu).join(", ") : "";
+            const tr2 = document.createElement("tr");
+            tr2.innerHTML = `
+                <td style="font-size: 5rem; background-color: #ECF3FB !important; color: #338BB9 !important;">Chuẩn bị</td>
+                <td style="font-size: 6rem;">${sttList}</td>
+            `;
+            tbody.appendChild(tr2);
         }
 
         // ===== Missed Patients Ticker =====
@@ -107,7 +179,7 @@ async function loadSTT(idPhongBuong, idChiNhanh) {
 
         // Restart interval với thời gian từ server
         if (currentInterval) clearTimeout(currentInterval);
-        currentInterval = setTimeout(() => loadSTT(idPhongBuong, idChiNhanh), intervalTime );
+        currentInterval = setTimeout(() => loadSTT(idPhongBuong, idChiNhanh), intervalTime);
 
     } catch (err) {
         console.error("Error loading STT:", err);
@@ -115,6 +187,7 @@ async function loadSTT(idPhongBuong, idChiNhanh) {
         currentInterval = setTimeout(() => loadSTT(idPhongBuong, idChiNhanh), 5000);
     }
 }
+
 
 // ===== Search Dropdown Component =====
 function initSearchDropdown({ inputId, dropdownId, hiddenFieldId, data = [], onSelect }) {
