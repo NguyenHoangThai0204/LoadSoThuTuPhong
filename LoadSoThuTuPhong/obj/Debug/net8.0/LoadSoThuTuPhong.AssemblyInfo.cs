@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("LoadSoThuTuPhong")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+630c776013d5a79cac6ab1d50c73d1d7d5382396")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+91cbce8b8c42b0e71d4626edbc55b26646e5793b")]
 [assembly: System.Reflection.AssemblyProductAttribute("LoadSoThuTuPhong")]
 [assembly: System.Reflection.AssemblyTitleAttribute("LoadSoThuTuPhong")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

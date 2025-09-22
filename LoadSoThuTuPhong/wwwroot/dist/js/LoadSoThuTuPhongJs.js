@@ -68,7 +68,7 @@ async function loadSTT(idPhongBuong, idChiNhanh) {
                 if (dangThucHien) {
                     const tr = document.createElement("tr");
                     tr.innerHTML = `
-                        <td style="font-size: 5rem;" class="status-wait">Đang khám</td>
+                        <td style="font-size: 5rem; background-color: #ECF3FB !important;" class="status-wait">Đang khám</td>
                         <td style="font-size: 6rem;">${dangThucHien.soThuTu}</td>
                     `;
                     tbody.appendChild(tr);
@@ -79,7 +79,7 @@ async function loadSTT(idPhongBuong, idChiNhanh) {
                     const sttList = dangCho.map(x => x.soThuTu).join(", ");
                     const tr = document.createElement("tr");
                     tr.innerHTML = `
-                        <td style="font-size: 5rem;" class="status-empty">Chuẩn bị</td>
+                        <td style="font-size: 5rem;background-color: #ECF3FB !important;" class="status-empty">Chuẩn bị</td>
                         <td style="font-size: 6rem;">${sttList}</td>
                     `;
                     tbody.appendChild(tr);
